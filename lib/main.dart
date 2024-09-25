@@ -82,11 +82,11 @@ class _BleExampleState extends State<BleExample> {
     // If Bluetooth is ready, start scanning.
     if (await bluetoothStatus == BleStatus.ready) {
       startBleScan();
-    } 
+    }
     // If Bluetooth is powered off, show a dialog asking the user to enable it.
     else if (await bluetoothStatus == BleStatus.poweredOff) {
       showBluetoothDialog();
-    } 
+    }
     // For other statuses, print an error message.
     else {
       print("Bluetooth not ready or permissions not granted.");
@@ -100,11 +100,13 @@ class _BleExampleState extends State<BleExample> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Bluetooth is Disabled'),
-          content: const Text('Please enable Bluetooth to scan for devices. Once enabled, click the button again.'),
+          content: const Text(
+              'Please enable Bluetooth to scan for devices. Once enabled, click the button again.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog and let the user retry scanning.
+                Navigator.of(context)
+                    .pop(); // Close the dialog and let the user retry scanning.
               },
               child: const Text('OK'),
             ),
@@ -117,13 +119,13 @@ class _BleExampleState extends State<BleExample> {
   // Method to start scanning for BLE devices.
   void startBleScan() {
     setState(() {
-      devices.clear(); // Clear previous scan results before starting a new scan.
+      devices
+          .clear(); // Clear previous scan results before starting a new scan.
     });
 
     // Subscribe to scan results and update the devices list with discovered devices.
-    scanStreamSubscription = flutterReactiveBle
-        .scanForDevices(withServices: [], scanMode: ScanMode.balanced)
-        .listen((device) {
+    scanStreamSubscription = flutterReactiveBle.scanForDevices(
+        withServices: [], scanMode: ScanMode.balanced).listen((device) {
       // Check if the device is already in the list, if not, add it.
       if (!devices.any((d) => d.id == device.id)) {
         setState(() {
@@ -140,7 +142,8 @@ class _BleExampleState extends State<BleExample> {
   Future<void> connectToDevice(String deviceId) async {
     setState(() {
       isConnecting = true;
-      connectionStatus = 'Connecting...'; // Update connection status to "Connecting".
+      connectionStatus =
+          'Connecting...'; // Update connection status to "Connecting".
     });
 
     // Cancel any existing connection streams.
@@ -148,35 +151,41 @@ class _BleExampleState extends State<BleExample> {
 
     // Attempt to connect to the BLE device.
     connectionStreamSubscription = flutterReactiveBle
-        .connectToDevice(id: deviceId, connectionTimeout: const Duration(seconds: 10))
+        .connectToDevice(
+            id: deviceId, connectionTimeout: const Duration(seconds: 10))
         .listen((connectionState) {
       // Handle different connection states.
       switch (connectionState.connectionState) {
         case DeviceConnectionState.connecting:
           setState(() {
-            connectionStatus = 'Connecting to $deviceId...'; // Update status to connecting.
+            connectionStatus =
+                'Connecting to $deviceId...'; // Update status to connecting.
           });
           break;
         case DeviceConnectionState.connected:
           setState(() {
             isConnected = true;
-            connectionStatus = 'Connected to $deviceId'; // Update status to connected.
+            connectionStatus =
+                'Connected to $deviceId'; // Update status to connected.
           });
           break;
         case DeviceConnectionState.disconnecting:
           setState(() {
-            connectionStatus = 'Disconnecting from $deviceId...'; // Update status to disconnecting.
+            connectionStatus =
+                'Disconnecting from $deviceId...'; // Update status to disconnecting.
           });
           break;
         case DeviceConnectionState.disconnected:
           setState(() {
             isConnected = false;
-            connectionStatus = 'Disconnected from $deviceId'; // Update status to disconnected.
+            connectionStatus =
+                'Disconnected from $deviceId'; // Update status to disconnected.
           });
           break;
         default:
           setState(() {
-            connectionStatus = 'Unknown connection state'; // Handle unexpected states.
+            connectionStatus =
+                'Unknown connection state'; // Handle unexpected states.
           });
       }
     }, onError: (e) {
@@ -196,7 +205,8 @@ class _BleExampleState extends State<BleExample> {
   Widget build(BuildContext context) {
     // Filter the device list based on the search MAC key entered by the user.
     final filteredDevices = devices
-        .where((device) => device.id.toLowerCase().contains(searchMacKey.toLowerCase()))
+        .where((device) =>
+            device.id.toLowerCase().contains(searchMacKey.toLowerCase()))
         .toList();
 
     return Scaffold(
@@ -216,7 +226,8 @@ class _BleExampleState extends State<BleExample> {
               ),
               onChanged: (value) {
                 setState(() {
-                  searchMacKey = value; // Update searchMacKey when the user types.
+                  searchMacKey =
+                      value; // Update searchMacKey when the user types.
                 });
               },
             ),
@@ -235,7 +246,7 @@ class _BleExampleState extends State<BleExample> {
               child: Text(connectionStatus),
             ),
             const CircularProgressIndicator(),
-          ] 
+          ]
           // If connected, show the connection status and an icon.
           else if (isConnected) ...[
             Padding(
@@ -243,7 +254,7 @@ class _BleExampleState extends State<BleExample> {
               child: Text(connectionStatus),
             ),
             const Icon(Icons.bluetooth_connected, color: Colors.green),
-          ] 
+          ]
           // Display the list of discovered devices.
           else
             Expanded(
@@ -252,7 +263,9 @@ class _BleExampleState extends State<BleExample> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(
-                      filteredDevices[index].name.isEmpty ? 'Unknown Device' : filteredDevices[index].name,
+                      filteredDevices[index].name.isEmpty
+                          ? 'Unknown Device'
+                          : filteredDevices[index].name,
                     ),
                     subtitle: Text(filteredDevices[index].id),
                     onTap: () {
