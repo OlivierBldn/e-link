@@ -15,7 +15,8 @@ class LedService {
   LedService();
 
   /// Discover LED characteristic
-  Future<void> discoverLedCharacteristic(String deviceId, List<Service> deviceServices) async {
+  Future<void> discoverLedCharacteristic(
+      String deviceId, List<Service> deviceServices) async {
     try {
       for (var service in deviceServices) {
         logger.i('Discovered service: ${service.id}');
@@ -23,7 +24,8 @@ class LedService {
           logger.i('Discovered characteristic: ${characteristic.id}');
 
           if (service.id.toString() == '00002760-08c2-11e1-9073-0e8ac72e1001' &&
-              characteristic.id.toString() == '00002760-08c2-11e1-9073-0e8ac72e0001') {
+              characteristic.id.toString() ==
+                  '00002760-08c2-11e1-9073-0e8ac72e0001') {
             ledCharacteristic = QualifiedCharacteristic(
               deviceId: deviceId,
               serviceId: service.id,
@@ -80,7 +82,7 @@ class LedService {
       case 'Front light':
         return 0x08;
       default:
-        return 0x01; 
+        return 0x01;
     }
   }
 
@@ -89,7 +91,9 @@ class LedService {
     try {
       if (ledCharacteristic != null) {
         List<int> command = buildLightControlCommand(state);
-        await flutterReactiveBle.writeCharacteristicWithoutResponse(ledCharacteristic!, value: command);
+        await flutterReactiveBle.writeCharacteristicWithoutResponse(
+            ledCharacteristic!,
+            value: command);
         logger.i('LED command sent successfully');
       } else {
         logger.e('LED characteristic not set.');
@@ -104,7 +108,8 @@ class LedService {
   Future<void> readLedCharacteristic(String deviceId) async {
     try {
       if (ledCharacteristic != null) {
-        List<int> value = await flutterReactiveBle.readCharacteristic(ledCharacteristic!);
+        List<int> value =
+            await flutterReactiveBle.readCharacteristic(ledCharacteristic!);
         logger.i('Read value: $value');
       } else {
         logger.e('LED characteristic not set.');

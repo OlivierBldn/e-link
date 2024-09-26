@@ -8,7 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('BLE Home'),
@@ -25,7 +24,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddDeviceScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AddDeviceScreen()),
                 );
               },
               child: const Text('Add New Device'),
@@ -37,7 +37,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DeviceListScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const DeviceListScreen()),
                 );
               },
               child: const Text('Devices List'),
@@ -49,11 +50,16 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const TemplateScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const TemplateScreen()),
                 );
               },
               child: const Text('Manage Templates'),
             ),
+            // ici
+            const Image(
+                image: NetworkImage(
+                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')),
           ],
         ),
       ),

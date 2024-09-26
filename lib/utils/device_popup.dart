@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
 import '../screens/device_detail_screen.dart';
+import '../services/image_service.dart';
+import '../widgets/image_selector.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 /// Show a popup when the user selects a device from a list
 void showDeviceOptions(BuildContext context, String deviceId) {
@@ -38,8 +42,24 @@ void showDeviceOptions(BuildContext context, String deviceId) {
               Navigator.pop(ctx);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DeviceDetailScreen(deviceId: deviceId)),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        DeviceDetailScreen(deviceId: deviceId)),
               );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info),
+            title: const Text('Send Image'),
+            onTap: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles();
+              if (result != null) {
+                File? _image = File(result.files.single.path!);
+                ImageService().sendImage(_image, 20, deviceId);
+                // ImageService().sendImage(_image, 20, deviceId);
+              } else {
+                print("no selection");
+              }
             },
           ),
         ],

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
+import '../widgets/image_selector.dart';
 
 class DeviceDetailScreen extends StatelessWidget {
   final String deviceId;
@@ -19,9 +20,19 @@ class DeviceDetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // ImageSelector(deviceId: deviceId),
             ElevatedButton(
               onPressed: () {
-                final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                final bleProvider =
+                    Provider.of<BleDeviceProvider>(context, listen: false);
+                bleProvider.sendLedCommand(true, deviceId);
+              },
+              child: const Text('Turn On LED'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final bleProvider =
+                    Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(true, deviceId);
               },
               child: const Text('Turn On LED'),
@@ -29,7 +40,8 @@ class DeviceDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                final bleProvider =
+                    Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(false, deviceId);
               },
               child: const Text('Turn Off LED'),
@@ -37,7 +49,8 @@ class DeviceDetailScreen extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                final bleProvider =
+                    Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.readLedCharacteristic(deviceId);
               },
               child: const Text('Read LED Value'),
