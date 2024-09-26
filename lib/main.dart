@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import './screens/TagIndex.dart'; // Adjust the import path as necessary
 
 void main() {
@@ -200,7 +202,7 @@ class _BleExampleState extends State<BleExample> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TagIndex()),
+                MaterialPageRoute(builder: (context) => const TagIndex()),
               );
             },
             child: const Text('Go to TagIndex'),
