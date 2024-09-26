@@ -1,4 +1,4 @@
-// // lib/screens/device_detail_screen.dart
+// lib/screens/device_detail_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,6 @@ class DeviceDetailScreen extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                // Send command to turn on LED
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(true, deviceId);
               },
@@ -30,7 +29,6 @@ class DeviceDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Send command to turn off LED
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(false, deviceId);
               },
@@ -39,7 +37,6 @@ class DeviceDetailScreen extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Read the LED characteristic value
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.readLedCharacteristic(deviceId);
               },

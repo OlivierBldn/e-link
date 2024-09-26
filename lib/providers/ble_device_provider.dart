@@ -6,12 +6,14 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logger/logger.dart' as app_logger;
 import '../models/ble_device.dart';
+import '../services/led_service.dart';
 
 final logger = app_logger.Logger();
 
 class BleDeviceProvider with ChangeNotifier {
   final flutterReactiveBle = FlutterReactiveBle();  
-  final List<BleDevice> devices = [];  
+  final List<BleDevice> devices = [];
+  LedService ledService = LedService();
   StreamSubscription<DiscoveredDevice>? scanStreamSubscription;
   StreamSubscription<ConnectionStateUpdate>? connectionStreamSubscription;
   StreamSubscription<BleStatus>? statusStreamSubscription;
@@ -148,123 +150,26 @@ class BleDeviceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Discover services and characteristics of the connected device
   Future<void> _discoverDeviceServices(String deviceId) async {
     try {
       flutterReactiveBle.discoverAllServices(deviceId);
-      deviceServices = await flutterReactiveBle.getDiscoveredServices(deviceId);
+      List<Service> deviceServices = await flutterReactiveBle.getDiscoveredServices(deviceId);
+      
+      await ledService.discoverLedCharacteristic(deviceId, deviceServices);
 
-      for (var service in deviceServices!) {
-        logger.i('Discovered service: ${service.id}');
-        for (var characteristic in service.characteristics) {
-          logger.i('Discovered characteristic: ${characteristic.id}');
-          
-          if (service.id.toString() == '00002760-08c2-11e1-9073-0e8ac72e1001' && characteristic.id.toString() == '00002760-08c2-11e1-9073-0e8ac72e0001') {
-            ledCharacteristic = QualifiedCharacteristic(
-              deviceId: deviceId,
-              serviceId: service.id,
-              characteristicId: characteristic.id,
-            );
-            logger.i('LED characteristic found and assigned.');
-          }
-        }
-      }
       notifyListeners();
     } catch (e) {
       logger.e('Error discovering services: $e');
     }
   }
 
-  String selectedColor = 'Red';
-
-  /// Build the command to control the LED
-  List<int> buildLightControlCommand(bool state) {
-    List<int> command = [
-      0x58, 0x54, 0x45, // "XTE" ASCII
-      0x01, // Terminal type
-      0x0B, // Packet length (from command to last parameter)
-      0x0B, // Light control command
-      state ? 0x02 : 0x01, // Control mode (0x02 for turn on, 0x01 for turn off)
-      getColorCode(selectedColor), // Light control type
-      (duration >> 8) & 0xFF, // Duration (MSB)
-      duration & 0xFF, // Duration (LSB)
-    ];
-
-    // Calculate checksum
-    int checksum = 0;
-    for (int i = 5; i < command.length; i++) {
-      checksum += command[i];
-    }
-    command.insert(5, checksum & 0xFF);
-    logger.i('Checksum calculated: ${checksum & 0xFF}');
-
-    return command;
-  }
-
-  /// Return color code based on input color string
-  int getColorCode(String color) {
-    switch (color) {
-      case 'Red':
-        return 0x01;
-      case 'Green':
-        return 0x02;
-      case 'Blue':
-        return 0x03;
-      case 'Yellow':
-        return 0x04;
-      case 'Purple':
-        return 0x05;
-      case 'Cyan':
-        return 0x06;
-      case 'White':
-        return 0x07;
-      case 'Front light':
-        return 0x08;
-      default:
-        return 0x01; 
-    }
-  }
-
-  /// Function to read LED characteristic value dynamically with the deviceId parameter
-  Future<void> readLedCharacteristic(String deviceId) async {
-    try {
-      QualifiedCharacteristic ledCharacteristic = QualifiedCharacteristic(
-        characteristicId: Uuid.parse("00002760-08c2-11e1-9073-0e8ac72e0001"),
-        serviceId: Uuid.parse("00002760-08c2-11e1-9073-0e8ac72e1001"),
-        deviceId: deviceId,
-      );
-
-      List<int> value = await flutterReactiveBle.readCharacteristic(ledCharacteristic);
-      print('Read value: $value');
-    } catch (e) {
-      print('Error reading characteristic: $e');
-    }
-  }
-
   Future<void> sendLedCommand(bool state, String deviceId) async {
-  try {
-    if (ledCharacteristic != null) {
-      List<int> command = buildLightControlCommand(state);
-      await flutterReactiveBle.writeCharacteristicWithoutResponse(ledCharacteristic!, value: command);
-      logger.i('LED command sent successfully');
-    } else {
-      logger.e('LED characteristic not set.');
-    }
-  } catch (e) {
-    logger.e('Error sending LED command, retrying: $e');
-    // Retry once after a short delay
-    await Future.delayed(const Duration(seconds: 2));
-    try {
-      if (ledCharacteristic != null) {
-        List<int> command = buildLightControlCommand(state);
-        await flutterReactiveBle.writeCharacteristicWithoutResponse(ledCharacteristic!, value: command);
-        logger.i('LED command sent successfully on retry.');
-      }
-    } catch (err) {
-      logger.e('Retry failed: $err');
-    }
+    await ledService.sendLedCommand(state);
   }
-}
+
+  Future<void> readLedCharacteristic(String deviceId) async {
+    await ledService.readLedCharacteristic(deviceId);
+  }
 
   @override
   void dispose() {
