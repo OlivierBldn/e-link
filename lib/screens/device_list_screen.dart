@@ -69,17 +69,25 @@ class _DeviceListScreenState extends State<DeviceListScreen> {
 
           // List of devices (filtered by search query)
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredDevices.length,
-              itemBuilder: (context, index) {
-                final device = filteredDevices[index];
-                return ListTile(
-                  title: Text(device.customName ?? device.name),
-                  subtitle: Text('MAC: ${device.mac}'),
-                  onTap: () {
-                    // Show the popup to connect/disconnect/view details
-                    showDeviceOptions(context, device.mac);
-                    showRenameDialog(context, device);
+            child: Consumer<BleDeviceProvider>(
+              builder: (context, bleProvider, child) {
+                final filteredDevices = bleProvider.devices.where((device) {
+                  return device.mac.contains(_searchQuery) || device.name.contains(_searchQuery);
+                }).toList();
+          
+                return ListView.builder(
+                  itemCount: filteredDevices.length,
+                  itemBuilder: (context, index) {
+                    final device = filteredDevices[index];
+                    return ListTile(
+                      title: Text(device.customName ?? device.name),
+                      subtitle: Text('MAC: ${device.mac}'),
+                      onTap: () {
+                        // Show the popup to connect/disconnect/view details
+                        showDeviceOptions(context, device.mac);
+                        showRenameDialog(context, device);
+                      },
+                    );
                   },
                 );
               },
