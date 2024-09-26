@@ -3,12 +3,26 @@ import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
 import '../utils/device_popup.dart';
 
-class DeviceListScreen extends StatelessWidget {
+class DeviceListScreen extends StatefulWidget {
   const DeviceListScreen({super.key});
+
+  @override
+  DeviceListScreenState createState() => DeviceListScreenState();
+}
+
+class DeviceListScreenState extends State<DeviceListScreen> {
+  // Controller for the search input field
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
     final bleProvider = Provider.of<BleDeviceProvider>(context);
+
+    // Filter the devices based on the search query (MAC address)
+    final filteredDevices = bleProvider.devices.where((device) {
+      return device.mac.toLowerCase().contains(_searchQuery.toLowerCase());
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -24,12 +38,32 @@ class DeviceListScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // Search bar for filtering devices by MAC address
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Search by MAC Address',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
           ElevatedButton(
             onPressed: () {
               bleProvider.startBleScan();
             },
             child: const Text('Scan for Devices'),
           ),
+
           // Display connection status (if any)
           if (bleProvider.connectionStatus.isNotEmpty)
             Padding(
@@ -37,12 +71,12 @@ class DeviceListScreen extends StatelessWidget {
               child: Text(bleProvider.connectionStatus),
             ),
 
-          // List of devices (both known and scanned)
+          // List of devices (filtered by search query)
           Expanded(
             child: ListView.builder(
-              itemCount: bleProvider.devices.length,
+              itemCount: filteredDevices.length,
               itemBuilder: (context, index) {
-                final device = bleProvider.devices[index];
+                final device = filteredDevices[index];
                 return ListTile(
                   title: Text(device.name),
                   subtitle: Text('MAC: ${device.mac}'),
@@ -57,5 +91,11 @@ class DeviceListScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
