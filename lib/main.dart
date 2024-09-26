@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => BleDeviceProvider()..initializeStatusListener(),  // Initialize Bluetooth status listener
+          create: (_) => BleDeviceProvider()
+            ..initializeStatusListener(), // Initialize Bluetooth status listener
         ),
       ],
       child: MaterialApp(
