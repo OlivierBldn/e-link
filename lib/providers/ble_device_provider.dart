@@ -6,6 +6,8 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:logger/logger.dart' as app_logger;
 import '../models/ble_device.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 final logger = app_logger.Logger();
 
@@ -65,10 +67,11 @@ class BleDeviceProvider with ChangeNotifier {
 
     scanStreamSubscription = flutterReactiveBle
         .scanForDevices(withServices: [], scanMode: ScanMode.balanced)
-        .listen((device) {
+        .listen((device) async {
       final newDevice = BleDevice(
         id: devices.length + 1,
         name: device.name.isEmpty ? 'Unknown Device' : device.name,
+        customName: await loadCustomName(device.id),
         mac: device.id,
         resolution: '1080x1920',
         uuid: device.id,
@@ -273,4 +276,46 @@ class BleDeviceProvider with ChangeNotifier {
     statusStreamSubscription?.cancel();
     super.dispose();
   }
+
+  static Future<void> saveCustomName(mac, customName) async {
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setString(mac, customName ?? '');
+    // print('Saved: $mac -> $customName'); // Debug
+  }
+
+  void changeDeviceName(String deviceId, String newName) async {
+  // Remplacez par les UUID appropriés
+  await connectToDevice(deviceId).then((_) {
+      _discoverDeviceServices(deviceId);
+    });
+  final serviceUuid = Uuid.parse('00002760-08c2-11e1-9073-0e8ac72e1001'); // UUID du service
+  final characteristicUuid = Uuid.parse('00002a00-0000-1000-8000-00805f9b34fb'); // UUID de la caractéristique
+
+  // Écrire le nouveau nom dans la caractéristique
+  await flutterReactiveBle.writeCharacteristicWithResponse(
+    QualifiedCharacteristic(
+      characteristicId: characteristicUuid,
+      serviceId: serviceUuid,
+      deviceId: deviceId,
+    ),
+    value: newName.codeUnits,
+  );
+  await disconnectFromDevice();
+  print('Device name changed to: $newName');
+}
+
+
+  // Load custom name from SharedPreferences
+  static Future<String?> loadCustomName(String mac) async {
+    // final prefs = await SharedPreferences.getInstance();
+    // return prefs.getString(mac);
+
+    final prefs = await SharedPreferences.getInstance();
+    String? customName = prefs.getString(mac);
+    print('Loaded: $mac -> $customName'); // Debug
+    return customName;
+  }
+
+
+  
 }

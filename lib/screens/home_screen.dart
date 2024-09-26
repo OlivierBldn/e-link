@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'add_device_screen.dart';
 import 'template_screen.dart';
 import 'device_list_screen.dart';
+import 'barcode_scanner_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -53,6 +54,18 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text('Manage Templates'),
+            ),
+            const SizedBox(height: 20),
+
+            // Scan barcode and connect to BLE
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BarcodeScannerScreen()),
+                );
+              },
+              child: const Text('Scan Barcode and Connect'),
             ),
           ],
         ),
