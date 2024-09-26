@@ -8,6 +8,7 @@ class BleDevice {
   final String resolution;  // Screen resolution (if available)
   final String uuid;        // UUID unique for the device
   final int battery;        // Battery percentage (if available)
+  String? customName;  // Custom name for the device
 
   /// Constructor for the BleDevice class.
   BleDevice({
@@ -17,5 +18,6 @@ class BleDevice {
     required this.resolution,
     required this.uuid,
     required this.battery,
+    String? customName,
   });
 }
