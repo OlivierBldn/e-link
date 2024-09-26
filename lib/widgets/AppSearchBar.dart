@@ -37,13 +37,16 @@ class AppSearchBar extends StatelessWidget {
                 color: AppColors.lightGray,
               ),
             ),
-            suffixIcon: SvgPicture.asset(
-              'assets/icons/searchIcon.svg',
-              height: 16,
-              width: 16,
-              colorFilter: const ColorFilter.mode(
-                AppColors.lightGray,
-                BlendMode.modulate,
+            suffixIcon: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SvgPicture.asset(
+                'assets/search.svg',
+                height: 16,
+                width: 16,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFF8E8E93),
+                  BlendMode.modulate,
+                ),
               ),
             ),
           ),

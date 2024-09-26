@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+
+import 'TagIndex.dart';
 import 'add_device_screen.dart';
-import 'template_screen.dart';
 import 'device_list_screen.dart';
+import 'template_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('BLE Home'),
@@ -25,7 +26,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddDeviceScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AddDeviceScreen()),
                 );
               },
               child: const Text('Add New Device'),
@@ -37,7 +39,8 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DeviceListScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const DeviceListScreen()),
                 );
               },
               child: const Text('Devices List'),
@@ -49,10 +52,23 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const TemplateScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const TemplateScreen()),
                 );
               },
               child: const Text('Manage Templates'),
+            ),
+            const SizedBox(height: 20),
+
+            // Tag
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TagIndex()),
+                );
+              },
+              child: const Text('Tag index'),
             ),
           ],
         ),

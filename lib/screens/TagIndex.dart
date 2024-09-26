@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/colors.dart';
 import 'package:flutter_application_1/widgets/AppSearchBar.dart';
-import 'package:flutter_application_1/widgets/AppTitle.dart';
+import 'package:flutter_application_1/widgets/NavBar.dart';
 import 'package:flutter_application_1/widgets/TagCard.dart';
+
+import '../widgets/AppTitle.dart';
 
 class TagIndex extends StatelessWidget {
   const TagIndex({super.key});
@@ -51,6 +53,7 @@ class TagIndex extends StatelessWidget {
               ],
             ),
           ),
+          const NavBar(selectedMenu: 'tags')
         ],
       ),
     );
