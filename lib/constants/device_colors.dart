@@ -1,4 +1,6 @@
-class Color {
+// lib/constants/colors.dart
+
+class DeviceColor {
   static const red = 0x01;
   static const green = 0x02;
   static const blue = 0x03;
