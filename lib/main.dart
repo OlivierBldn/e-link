@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'providers/ble_device_provider.dart';
 import 'screens/home_screen.dart';
 
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => BleDeviceProvider()..initializeStatusListener(),  // Initialize Bluetooth status listener
+          create: (_) => BleDeviceProvider()
+            ..initializeStatusListener(), // Initialize Bluetooth status listener
         ),
       ],
       child: MaterialApp(
