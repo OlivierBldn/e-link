@@ -6,8 +6,11 @@ import 'package:provider/provider.dart';
 import 'providers/ble_device_provider.dart';
 import 'screens/home_screen.dart';
 
+import '../services/authorization_service.dart';
+
 void main() {
   runApp(const MyApp());
+  AuthorizationService().checkPermissions();
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => BleDeviceProvider()
-            ..initializeStatusListener(), // Initialize Bluetooth status listener
+            ..initializeStatusListener(),
         ),
       ],
       child: MaterialApp(
