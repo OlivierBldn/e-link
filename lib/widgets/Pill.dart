@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/CustomButton.dart';
+import 'package:flutter_application_1/constants/colors.dart';
+import 'package:flutter_application_1/constants/radiuses.dart';
+import 'package:flutter_application_1/constants/text_sizes.dart';
 
 class Pill extends StatelessWidget {
-  const Pill({super.key});
+  final String text;
+  const Pill({
+    super.key,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Custom Text Input Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: const BoxDecoration(
+        borderRadius: AppRadiuses.xl,
+        color: AppColors.darkGray,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Custom Text Input Example'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                text: '7.5"',
-                backgroundColor: Colors.grey[600]!,
-                width: 40,
-              ),
-            ],
-          ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: AppColors.white,
+          fontSize: AppTextSizes.sm,
         ),
       ),
     );
