@@ -89,6 +89,7 @@ class LedService {
     try {
       if (ledCharacteristic != null) {
         List<int> command = buildLightControlCommand(state);
+
         await flutterReactiveBle.writeCharacteristicWithoutResponse(ledCharacteristic!, value: command);
         logger.i('LED command sent successfully');
       } else {

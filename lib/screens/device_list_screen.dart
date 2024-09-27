@@ -2,27 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
 import '../utils/device_popup.dart';
+import '../utils/rename_device_popup.dart';
 
 class DeviceListScreen extends StatefulWidget {
   const DeviceListScreen({super.key});
 
   @override
-  DeviceListScreenState createState() => DeviceListScreenState();
+  _DeviceListScreenState createState() => _DeviceListScreenState();
 }
 
-class DeviceListScreenState extends State<DeviceListScreen> {
+class _DeviceListScreenState extends State<DeviceListScreen> {
   // Controller for the search input field
-  final TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
     final bleProvider = Provider.of<BleDeviceProvider>(context);
-
-    // Filter the devices based on the search query (MAC address)
-    final filteredDevices = bleProvider.devices.where((device) {
-      return device.mac.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -44,8 +40,8 @@ class DeviceListScreenState extends State<DeviceListScreen> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: 'Search by MAC Address',
-                prefixIcon: const Icon(Icons.search),
+                labelText: 'Search by MAC Address or Name',
+                prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -73,16 +69,25 @@ class DeviceListScreenState extends State<DeviceListScreen> {
 
           // List of devices (filtered by search query)
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredDevices.length,
-              itemBuilder: (context, index) {
-                final device = filteredDevices[index];
-                return ListTile(
-                  title: Text(device.name),
-                  subtitle: Text('MAC: ${device.mac}'),
-                  onTap: () {
-                    // Show the popup to connect/disconnect/view details
-                    showDeviceOptions(context, device.mac);
+            child: Consumer<BleDeviceProvider>(
+              builder: (context, bleProvider, child) {
+                final filteredDevices = bleProvider.devices.where((device) {
+                  return device.mac.contains(_searchQuery) || device.name.contains(_searchQuery);
+                }).toList();
+          
+                return ListView.builder(
+                  itemCount: filteredDevices.length,
+                  itemBuilder: (context, index) {
+                    final device = filteredDevices[index];
+                    return ListTile(
+                      title: Text(device.customName ?? device.name),
+                      subtitle: Text('MAC: ${device.mac}'),
+                      onTap: () {
+                        // Show the popup to connect/disconnect/view details
+                        showDeviceOptions(context, device.mac);
+                        showRenameDialog(context, device);
+                      },
+                    );
                   },
                 );
               },

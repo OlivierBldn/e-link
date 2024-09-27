@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'TagIndex.dart';
+import 'add_device_screen.dart';
+import 'device_list_screen.dart';
+import 'template_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -11,6 +16,62 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+
+            // Add a new device (starts BLE scan)
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddDeviceScreen()),
+                );
+              },
+              child: const Text('Add New Device'),
+            ),
+            const SizedBox(height: 20),
+
+            // Known/scanned devices
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DeviceListScreen()),
+                );
+              },
+              child: const Text('Devices List'),
+            ),
+            const SizedBox(height: 20),
+
+            // Manage templates
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TemplateScreen()),
+                );
+              },
+              child: const Text('Manage Templates'),
+            ),
+            const SizedBox(height: 20),
+
+            // Tag
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TagIndex()),
+                );
+              },
+              child: const Text('Tag index'),
+            ),
+          ],
+        ),
       ),
     );
   }
