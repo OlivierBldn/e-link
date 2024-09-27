@@ -1,10 +1,12 @@
 // lib/main.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/TagIndex.dart';
+
 import 'package:provider/provider.dart';
 
 import 'providers/ble_device_provider.dart';
-import 'screens/home_screen.dart';
+
 
 import '../services/authorization_service.dart';
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomeScreen(),
+        home: const TagIndex(),
       ),
     );
   }

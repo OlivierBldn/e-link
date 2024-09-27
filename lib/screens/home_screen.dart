@@ -46,30 +46,6 @@ class HomeScreen extends StatelessWidget {
               child: const Text('Devices List'),
             ),
             const SizedBox(height: 20),
-
-            // Manage templates
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TemplateScreen()),
-                );
-              },
-              child: const Text('Manage Templates'),
-            ),
-            const SizedBox(height: 20),
-
-            // Tag
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TagIndex()),
-                );
-              },
-              child: const Text('Tag index'),
-            ),
           ],
         ),
       ),

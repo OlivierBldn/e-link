@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/colors.dart';
+import 'package:flutter_application_1/constants/radiuses.dart';
+import 'package:flutter_application_1/constants/text_sizes.dart';
+import 'package:flutter_application_1/screens/template_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class NavBar extends StatelessWidget {
   final String selectedMenu;
@@ -12,67 +16,111 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      margin: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
+      height: 80,
+      margin: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
+        borderRadius: AppRadiuses.xl,
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
-            blurRadius: 5.0,
+            color: Color.fromARGB(70, 0, 0, 0),
+            blurRadius: 10,
+            offset: Offset(2, 2),
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  color: selectedMenu == 'tags'
-                      ? AppColors.primaryColor
-                      : Colors.black,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/tags.svg',
+                    height: 32,
+                    width: 32,
+                    color: selectedMenu == 'tags'
+                        ? AppColors.primaryColor
+                        : AppColors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/');
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/');
-                },
-              ),
-              Text(
-                'Tags',
-                style: TextStyle(
-                  color: selectedMenu == 'tags'
-                      ? AppColors.primaryColor
-                      : Colors.black,
+                Text(
+                  'Tags',
+                  style: TextStyle(
+                    color: selectedMenu == 'tags'
+                        ? AppColors.primaryColor
+                        : Colors.black,
+                    fontSize: AppTextSizes.md,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  color: selectedMenu == 'templates'
-                      ? AppColors.primaryColor
-                      : Colors.black,
+              ],
+            ),
+            Column(
+              children: [
+                IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/template.svg',
+                    height: 32,
+                    width: 32,
+                    color: selectedMenu == 'templates'
+                        ? AppColors.primaryColor
+                        : AppColors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TemplateScreen()),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/');
-                },
-              ),
-              Text(
-                'Templates',
-                style: TextStyle(
-                  color: selectedMenu == 'templates'
-                      ? AppColors.primaryColor
-                      : Colors.black,
+                Text(
+                  'Templates',
+                  style: TextStyle(
+                    color: selectedMenu == 'templates'
+                        ? AppColors.primaryColor
+                        : Colors.black,
+                    fontSize: AppTextSizes.md,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            Column(
+              children: [
+                IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/settings.svg',
+                    height: 32,
+                    width: 32,
+                    color: selectedMenu == 'settings'
+                        ? AppColors.primaryColor
+                        : AppColors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/settings');
+                  },
+                ),
+                Text(
+                  'Settings',
+                  style: TextStyle(
+                    color: selectedMenu == 'settings'
+                        ? AppColors.primaryColor
+                        : Colors.black,
+                    fontSize: AppTextSizes.md,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

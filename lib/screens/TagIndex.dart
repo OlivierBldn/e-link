@@ -46,30 +46,33 @@ class TagIndexState extends State<TagIndex> {
                   blackText: 'Your ',
                   purpleText: 'Tags',
                 ),
-                 AppSearchBar(
+                AppSearchBar(
                   placeholder: 'Please enter a tag name or MAC',
-                   searchController: _searchController,
-                    onChanged: (value) {
+                  searchController: _searchController,
+                  onChanged: (value) {
                     setState(() {
-                      _searchQuery = value; 
+                      _searchQuery = value;
                     });
                   },
                 ),
-                
-                ElevatedButton(
-                  onPressed: () {
-                    _startScan(bleProvider);
-                  },
-                  child: const Text('Scan for Devices'),
-                ),
                 const SizedBox(height: 20),
+
+                Padding(padding: const EdgeInsets.only(left: 40.0, right: 40), child :
+                  ElevatedButton(
+                    onPressed: () {
+                      _startScan(bleProvider);
+                    },
+                    child: const Text('Scan for Devices'),
+                  ),
+                ),
                 _isScanning
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
                     : Consumer<BleDeviceProvider>(
                         builder: (context, provider, child) {
-                          final filteredDevices = provider.devices.where((device) {
+                          final filteredDevices =
+                              provider.devices.where((device) {
                             return device.name
                                     .toLowerCase()
                                     .contains(_searchQuery.toLowerCase()) ||
@@ -86,11 +89,14 @@ class TagIndexState extends State<TagIndex> {
                               ),
                             );
                           }
-
-                          return Column(
+                          return Padding(padding: const EdgeInsets.all(40.0),
+                          child: Column(
                             children: filteredDevices.map((device) {
+                            
                               return TagCard(
-                                title: device.name.isEmpty ? 'Unknown Device' : device.name,
+                                title: device.name.isEmpty
+                                    ? 'Unknown Device'
+                                    : device.name,
                                 available: provider.isConnected &&
                                     device.mac == provider.connectedDevice?.mac,
                                 screenSize: 7.5,
@@ -99,11 +105,12 @@ class TagIndexState extends State<TagIndex> {
                                 colorMode: 'BWR',
                                 mac: device.mac,
                                 battery: '${device.battery}%',
-                                onTap: (){
-                                   showDeviceOptions(context, device.mac);
+                                onTap: () {
+                                  showDeviceOptions(context, device.mac);
                                 },
                               );
                             }).toList(),
+                          ),
                           );
                         },
                       ),

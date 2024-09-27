@@ -1,22 +1,58 @@
-// lib/screens/template_screen.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/constants/colors.dart';
+import 'package:flutter_application_1/widgets/AppSearchBar.dart';
+import 'package:flutter_application_1/widgets/NavBar.dart';
 
-class TemplateScreen extends StatelessWidget {
+import '../widgets/AppTitle.dart';
+
+class TemplateScreen extends StatefulWidget {
   const TemplateScreen({super.key});
+
+  @override
+  TemplateScreenState createState() => TemplateScreenState();
+}
+
+class TemplateScreenState extends State<TemplateScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Templates'),
-      ),
-      body: const Center(
-        child: Text(
-          'Template Management Screen',
-          style: TextStyle(fontSize: 20),
-        ),
+      backgroundColor: AppColors.backgroundColor,
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                const AppTitle(
+                  blackText: 'Your ',
+                  purpleText: 'Templates',
+                ),
+                AppSearchBar(
+                  placeholder: 'Please enter a template name',
+                  searchController: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                ),
+               const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: NavBar(selectedMenu: 'templates'),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

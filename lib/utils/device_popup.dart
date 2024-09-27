@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
-import '../screens/device_detail_screen.dart';
+// import '../screens/device_detail_screen.dart';
 
 /// Show a popup when the user selects a device from a list
 void showDeviceOptions(BuildContext context, String deviceId) {
@@ -32,14 +32,27 @@ void showDeviceOptions(BuildContext context, String deviceId) {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('View Details'),
+            leading: const Icon(Icons.check_circle_outline),
+            title: const Text('Turn On LED'),
             onTap: () {
-              Navigator.pop(ctx);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DeviceDetailScreen(deviceId: deviceId)),
-              );
+              final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                bleProvider.sendLedCommand(true, deviceId);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.power_settings_new),
+            title: const Text('Turn Off LED'),
+            onTap: () {
+              final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                bleProvider.sendLedCommand(false, deviceId);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.format_list_bulleted),
+            title: const Text('Read LED Value'),
+            onTap: () {
+              final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
+                bleProvider.readLedCharacteristic(deviceId);
             },
           ),
         ],
