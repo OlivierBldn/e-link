@@ -6,10 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AppSearchBar extends StatelessWidget {
   final String placeholder;
+  final TextEditingController searchController;
+  final ValueChanged<String> onChanged;
 
   const AppSearchBar({
     super.key,
     required this.placeholder,
+    required this.searchController,
+    required this.onChanged,
   });
 
   @override
@@ -22,6 +26,7 @@ class AppSearchBar extends StatelessWidget {
       child: SizedBox(
         height: 36, // Set your desired height here
         child: TextField(
+          controller: searchController,
           decoration: InputDecoration(
             hintText: placeholder,
             hintStyle: const TextStyle(
@@ -50,6 +55,7 @@ class AppSearchBar extends StatelessWidget {
               ),
             ),
           ),
+          onChanged: onChanged, 
         ),
       ),
     );
