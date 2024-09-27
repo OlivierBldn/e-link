@@ -6,6 +6,7 @@ import 'package:flutter_application_1/widgets/NavBar.dart';
 import 'package:flutter_application_1/widgets/TagCard.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/device_popup.dart';
 import '../widgets/AppTitle.dart';
 
 class TagIndex extends StatefulWidget {
@@ -98,6 +99,9 @@ class TagIndexState extends State<TagIndex> {
                                 colorMode: 'BWR',
                                 mac: device.mac,
                                 battery: '${device.battery}%',
+                                onTap: (){
+                                   showDeviceOptions(context, device.mac);
+                                },
                               );
                             }).toList(),
                           );

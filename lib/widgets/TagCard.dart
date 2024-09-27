@@ -12,6 +12,7 @@ class TagCard extends StatelessWidget {
   final String colorMode;
   final String mac;
   final String battery;
+  final VoidCallback onTap;
 
   const TagCard({
     super.key,
@@ -23,6 +24,7 @@ class TagCard extends StatelessWidget {
     required this.colorMode,
     required this.mac,
     required this.battery,
+    required this.onTap,
   });
 
   @override
@@ -40,6 +42,7 @@ class TagCard extends StatelessWidget {
           Icons.circle,
           color: available ? AppColors.valid : AppColors.invalid,
         ),
+        onTap: onTap,
       ),
     );
   }

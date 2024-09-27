@@ -24,7 +24,7 @@ class AppSearchBar extends StatelessWidget {
         vertical: 0,
       ),
       child: SizedBox(
-        height: 36, // Set your desired height here
+        height: 36, 
         child: TextField(
           controller: searchController,
           decoration: InputDecoration(
