@@ -8,6 +8,7 @@ import '../services/image_service.dart';
 import '../services/screen_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 
 /// Show a popup when the user selects a device from a list
 void showDeviceOptions(BuildContext context, String deviceId) {
@@ -56,8 +57,8 @@ void showDeviceOptions(BuildContext context, String deviceId) {
               if (result != null) {
                 File? _image = File(result.files.single.path!);
                 ImageService().sendImage(_image, 20, deviceId);
-                ScreenService().Refresh(deviceId);
-                // ImageService().sendImage(_image, 20, deviceId);
+                ScreenService().refresh(deviceId);
+                ImageService().sendRedImage(deviceId);
               } else {
                 print("no selection");
               }
