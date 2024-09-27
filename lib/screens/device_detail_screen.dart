@@ -20,15 +20,6 @@ class DeviceDetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // ImageSelector(deviceId: deviceId),
-            ElevatedButton(
-              onPressed: () {
-                final bleProvider =
-                    Provider.of<BleDeviceProvider>(context, listen: false);
-                bleProvider.sendLedCommand(true, deviceId);
-              },
-              child: const Text('Turn On LED'),
-            ),
             ElevatedButton(
               onPressed: () {
                 final bleProvider =

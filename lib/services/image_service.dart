@@ -57,23 +57,52 @@ class ImageService {
     var a = rawImage!.readAsBytesSync();
     Uint8List img = Uint8List.fromList(a);
     print("size: ${img.length}");
+
+    try {
+      // demande de l'espace de cache
+      flutterReactiveBle.writeCharacteristicWithoutResponse(
+          QualifiedCharacteristic(
+            deviceId: deviceId,
+            serviceId: Uuid.parse(AppConstants.appServiceId),
+            characteristicId: Uuid.parse(AppConstants.appCharacteristicId),
+          ),
+          value: [
+            0x58,
+            0x54,
+            0x45,
+            0x01,
+            0x0b,
+            0xC9, // checksum
+            0x01, // commande
+            0x00,
+            0x00,
+            0x04,
+            0xc4
+          ]);
+    } catch (e) {
+      print("Error allocation cache: $e");
+    }
+
     while (offset < img.length) {
       int end =
           (offset + chunkSize < img.length) ? offset + chunkSize : img.length;
       List<int> chunk = img.sublist(offset, end);
-      print("Sending chunk of size: ${chunk.length}, offset: $offset");
+      print(
+          "Sending chunk of size: ${chunk.length}, offset: $offset, chunk: $chunk");
       try {
-        flutterReactiveBle.writeCharacteristicWithResponse(
-            QualifiedCharacteristic(
-              deviceId: deviceId,
-              serviceId: Uuid.parse(AppConstants.appServiceId),
-              characteristicId: Uuid.parse(AppConstants.appCharacteristicId),
-            ),
+        QualifiedCharacteristic characteristic = QualifiedCharacteristic(
+          deviceId: deviceId,
+          serviceId: Uuid.parse(AppConstants.appServiceId),
+          characteristicId: Uuid.parse(AppConstants.appCharacteristicId),
+        );
+
+        // envoie chaque chunk de donnée un à un
+        flutterReactiveBle.writeCharacteristicWithResponse(characteristic,
             value: chunk);
 
         print("Chunk sent successfully");
       } catch (e) {
-        print("Error writing chunk: $e");
+        print("Error writing chunk $offset: $e");
         break;
       }
     }

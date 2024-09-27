@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/ble_device_provider.dart';
 import '../screens/device_detail_screen.dart';
 import '../services/image_service.dart';
-import '../widgets/image_selector.dart';
+import '../services/screen_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
@@ -56,6 +56,7 @@ void showDeviceOptions(BuildContext context, String deviceId) {
               if (result != null) {
                 File? _image = File(result.files.single.path!);
                 ImageService().sendImage(_image, 20, deviceId);
+                ScreenService().Refresh(deviceId);
                 // ImageService().sendImage(_image, 20, deviceId);
               } else {
                 print("no selection");
