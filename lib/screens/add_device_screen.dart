@@ -43,8 +43,8 @@ class AddDeviceScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final device = bleProvider.devices[index];
                 return ListTile(
-                  title: Text(device.name.isEmpty ? 'Unknown Device' : device.name),
-                  subtitle: Text('MAC: ${device.mac}'),
+                  title: Text(device.customName ?? 'dans lautre'),
+                  subtitle: Text('MAC: ${device.mac ?? 'Unknown MAC'}'),
                   onTap: () {
                     bleProvider.connectToDevice(device.mac);
                     ScaffoldMessenger.of(context).showSnackBar(
