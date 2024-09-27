@@ -10,7 +10,7 @@ class AddDeviceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bleProvider = Provider.of<BleDeviceProvider>(context);
-
+    // Add a new device screen
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Device'),

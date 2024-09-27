@@ -4,7 +4,9 @@ import '../providers/ble_device_provider.dart';
 
 void showRenameDialog(BuildContext context, BleDevice device) {
   final TextEditingController nameController = TextEditingController(text: device.customName);
-
+  // Show a dialog to rename the device
+  // The dialog will have a text field to enter the new name
+  // Need to be tested
   showDialog(
     context: context,
     builder: (context) {

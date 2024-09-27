@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/device_list_screen.dart';
 
 import 'TagIndex.dart';
 import 'add_device_screen.dart';
-import 'device_list_screen.dart';
-import 'barcode_scanner_screen.dart';
 import 'template_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  // Home screen with buttons to navigate to different screens
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const DeviceListScreen()),
+                      builder: (context) => DeviceListScreen()),
                 );
               },
               child: const Text('Devices List'),
@@ -61,17 +61,18 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
+            // mode supprimé car provoquant des problèmes de build de l'apk via la libraire 
             // Scan barcode and connect to BLE
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const BarcodeScannerScreen()),
-                );
-              },
-              child: const Text('Scan Barcode and Connect'),
-            ),
-            const SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const BarcodeScannerScreen()),
+            //     );
+            //   },
+            //   child: const Text('Scan Barcode and Connect'),
+            // ),
+            // const SizedBox(height: 20),
 
             // Tag
             ElevatedButton(

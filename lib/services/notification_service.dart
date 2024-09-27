@@ -17,7 +17,7 @@ class NotificationService {
       logger.i('Discovering services...');
       // Correct the type to List<Service>
       List<Service> services = await ble.getDiscoveredServices(deviceId);
-
+      // affichage des services et de leurs caractéristiques
       for (var service in services) {
         logger.i('Service found: ${service.id}');
         for (var characteristic in service.characteristics) {
@@ -29,17 +29,17 @@ class NotificationService {
               serviceId: service.id,
               characteristicId: characteristic.id,
             );
-
+            // Start listening to notifications
             await startListening();
             logger.i('Subscribed to notifications for characteristic: ${characteristic.id}');
           }
         }
       }
 
-      if (notifyCharacteristic == null) {
+      if (notifyCharacteristic == null) { // No notify characteristic found
         logger.w('No notify characteristic found.');
       }
-    } catch (e) {
+    } catch (e) { // Error discovering services
       logger.e('Error discovering services: $e');
     }
   }

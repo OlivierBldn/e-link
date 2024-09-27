@@ -66,7 +66,7 @@ class BleDeviceProvider with ChangeNotifier {
 
     devices.clear();
     scanStreamSubscription?.cancel();
-
+    // Start scanning for devices
     scanStreamSubscription = flutterReactiveBle
         .scanForDevices(withServices: [], scanMode: ScanMode.balanced)
         .listen((device) async {
@@ -79,7 +79,7 @@ class BleDeviceProvider with ChangeNotifier {
         uuid: device.id,
         battery: 100,
       );
-
+      // Add the device to the list if it's not already there
       if (!devices.any((d) => d.mac == device.id)) {
         devices.add(newDevice);
         notifyListeners();
@@ -87,7 +87,7 @@ class BleDeviceProvider with ChangeNotifier {
     }, onError: (e) {
       logger.e('Error during scanning: $e');
     });
-
+    // Stop scanning after 10 seconds
     await Future.delayed(const Duration(seconds: 10));
     scanStreamSubscription?.cancel();
   }
@@ -106,29 +106,29 @@ class BleDeviceProvider with ChangeNotifier {
     notifyListeners();
 
     connectionStreamSubscription?.cancel();
-
+    // Connect to the device
     connectionStreamSubscription = flutterReactiveBle
         .connectToDevice(id: deviceId, connectionTimeout: const Duration(seconds: 10))
         .listen((connectionState) async {
-      switch (connectionState.connectionState) {
-        case DeviceConnectionState.connecting:
+      switch (connectionState.connectionState) { // Handle connection state changes
+        case DeviceConnectionState.connecting: // Connecting to the device
           connectionStatus = 'Connecting to $deviceId...';
           break;
-        case DeviceConnectionState.connected:
+        case DeviceConnectionState.connected: // Connected to the device
           isConnected = true;
           connectionStatus = 'Connected to $deviceId';
           connectedDevice = devices.firstWhere((d) => d.mac == deviceId);
           await _discoverDeviceServices(deviceId);
           break;
-        case DeviceConnectionState.disconnecting:
+        case DeviceConnectionState.disconnecting: // Disconnecting from the device
           connectionStatus = 'Disconnecting from $deviceId...';
           break;
-        case DeviceConnectionState.disconnected:
+        case DeviceConnectionState.disconnected: // Disconnected from the device
           isConnected = false;
           connectionStatus = 'Disconnected from $deviceId';
           connectedDevice = null;
           break;
-        default:
+        default: // Unknown connection state
           connectionStatus = 'Unknown connection state';
       }
       notifyListeners();
@@ -153,6 +153,7 @@ class BleDeviceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Discover services for the connected device
   Future<void> _discoverDeviceServices(String deviceId) async {
     try {
       flutterReactiveBle.discoverAllServices(deviceId);
@@ -166,14 +167,18 @@ class BleDeviceProvider with ChangeNotifier {
     }
   }
 
+  // Send LED command to the device
   Future<void> sendLedCommand(bool state, String deviceId) async {
     await ledService.sendLedCommand(state);
   }
 
+  // Read LED characteristic from the device
   Future<void> readLedCharacteristic(String deviceId) async {
     await ledService.readLedCharacteristic(deviceId);
   }
 
+  // Load custom name from SharedPreferences
+  // Test this function by calling it from the UI on Android and iOS
   @override
   void dispose() {
     scanStreamSubscription?.cancel();
@@ -182,12 +187,7 @@ class BleDeviceProvider with ChangeNotifier {
     super.dispose();
   }
 
-  static Future<void> saveCustomName(mac, customName) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setString(mac, customName ?? '');
-    // print('Saved: $mac -> $customName'); // Debug
-  }
-
+  // Save custom name to SharedPreferences
   void changeDeviceName(String deviceId, String newName) async {
   // Remplacez par les UUID appropriés
   await connectToDevice(deviceId).then((_) {

@@ -100,7 +100,7 @@ class LedService {
     }
   }
 
-  ///TO FIX
+  /// TO FIX
   /// Read the LED characteristic
   Future<void> readLedCharacteristic(String deviceId) async {
     try {

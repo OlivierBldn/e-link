@@ -6,9 +6,10 @@ import '../providers/ble_device_provider.dart';
 
 class DeviceDetailScreen extends StatelessWidget {
   final String deviceId;
-
+  // Device detail screen to control LED
   const DeviceDetailScreen({super.key, required this.deviceId});
 
+  // Build the device detail screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +20,7 @@ class DeviceDetailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            ElevatedButton( // Button to turn on LED
               onPressed: () {
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(true, deviceId);
@@ -27,7 +28,7 @@ class DeviceDetailScreen extends StatelessWidget {
               child: const Text('Turn On LED'),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton( // Button to turn off LED
               onPressed: () {
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.sendLedCommand(false, deviceId);
@@ -35,7 +36,7 @@ class DeviceDetailScreen extends StatelessWidget {
               child: const Text('Turn Off LED'),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
+            ElevatedButton( // Button to read LED value
               onPressed: () {
                 final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
                 bleProvider.readLedCharacteristic(deviceId);

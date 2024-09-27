@@ -8,7 +8,7 @@ import '../screens/device_detail_screen.dart';
 /// Show a popup when the user selects a device from a list
 void showDeviceOptions(BuildContext context, String deviceId) {
   final bleProvider = Provider.of<BleDeviceProvider>(context, listen: false);
-
+  // Show a bottom sheet with device options
   showModalBottomSheet(
     context: context,
     builder: (BuildContext ctx) {
