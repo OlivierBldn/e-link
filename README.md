@@ -27,6 +27,16 @@ This Flutter app includes the following features:
    - The app handles four connection states: `connecting`, `connected`, `disconnecting`, and `disconnected`.
    - The user is informed of the current connection state through a status message and icons.
 
+5. **Connection Error Handling**:
+   - If the connection fails, the app displays an error message to the user.
+
+6. **Permission Handling**:
+   - The app requests the necessary permissions for BLE functionality if they are not already granted.
+   - The user is prompted to grant location and Bluetooth permissions.
+
+7. **Device Details**:
+   - The user can view the details of a connected device, including its MAC address and services.
+
 ---
 
 #### How to Use
@@ -43,9 +53,35 @@ This Flutter app includes the following features:
 4. **Monitor Connection Status**:
    - The app will notify you if the device is connected, disconnected, or if the connection fails.
 
+5. **Disconnect from a Device**:
+   - Tap on the connected device to disconnect from it.
+
+6. **Request Permissions**:
+   - The app will request the necessary permissions for BLE functionality if they are not already granted.
+
+7. **Refresh Device List**:
+   - Press the "Scan for Devices" button again to refresh the list of found devices.
+
+8. **View Device Details**:
+   - Tap on a device to view its details, including its MAC address, connection status, and services.
+
+9. **Reconnect to a Device**:
+   - If the connection is lost, the app will attempt to reconnect to the device automatically.
+
+10. **Monitor Connection State**:
+    - The app will display the current connection state in real-time, including `connecting`, `connected`, `disconnecting`, and `disconnected`.
+
+11. **Handle Connection Errors**:
+    - The app will display an error message if the connection fails.
+
 ---
 
 #### Dependencies
 
 - `flutter_reactive_ble`: Provides BLE scanning and connection functionality.
 - `permission_handler`: Manages necessary permissions (location, Bluetooth) for BLE functionality.
+- `cupertino_icon`: This is an asset repo containing the default set of icon assets used by Flutter's
+- `provider`: By using provider instead of manually writing InheritedWidget, you get: simplified allocation/disposal of resources, lazy-loading, a vastly reduced boilerplate over making a new class every time, devtool friendly – using Provider, the state of your application will be visible in the Flutter devtool, a common way to consume these InheritedWidgets (See Provider.of/Consumer/Selector), increased scalability for classes with a listening mechanism that grows exponentially in complexity (such as ChangeNotifier, which is O(N) for dispatching notifications).
+- `logger`: Small, easy to use and extensible logger which prints beautiful logs.
+- `flutter_svg`: Draw SVG files using Flutter.
+- `shared_preferences`: Wraps platform-specific persistent storage for simple data (NSUserDefaults on iOS and macOS, SharedPreferences on Android, etc.)
